@@ -1,4 +1,4 @@
-package com.simon.guardservice;
+package com.simon.guardservice.doubleprocess;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -9,10 +9,14 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.simon.guardservice.SimonConnection;
+
+
 /**
  * Created by Simon on 2017/9/14.
  */
-public class RemoteGuardService extends Service {
+public class LocalGuardService extends Service {
+
     MyBinder mBinder;
     MyServiceConnection mServiceConnection;
 
@@ -27,7 +31,7 @@ public class RemoteGuardService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.bindService(new Intent(this, LocalGuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        this.bindService(new Intent(this, RemoteGuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
         return START_STICKY;
     }
 
@@ -35,14 +39,15 @@ public class RemoteGuardService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-            Log.i("Simon", "本地服务连接成功");
+            Log.i("Simon", "远程服务连接成功");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            // LocalGuardService被杀死，重启LocalGuardService
-            RemoteGuardService.this.startService(new Intent(RemoteGuardService.this, LocalGuardService.class));
-            RemoteGuardService.this.bindService(new Intent(RemoteGuardService.this, LocalGuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            // RemoteGuardService被杀掉，重启RemoteGuardlService
+            LocalGuardService.this.startService(new Intent(LocalGuardService.this, RemoteGuardService.class));
+            LocalGuardService.this.bindService(new Intent(LocalGuardService.this, RemoteGuardService.class),
+                    mServiceConnection, Context.BIND_IMPORTANT);
         }
 
     }

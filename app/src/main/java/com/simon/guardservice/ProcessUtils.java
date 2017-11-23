@@ -3,6 +3,7 @@ package com.simon.guardservice;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -53,5 +54,20 @@ public class ProcessUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 杀死进程
+     *
+     * @param pid 进程号
+     */
+    public static void killCurrentProcess(int pid) {
+        // int pid = android.os.Process.myPid();
+        String command = "kill -9 " + pid;
+        try {
+            Runtime.getRuntime().exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

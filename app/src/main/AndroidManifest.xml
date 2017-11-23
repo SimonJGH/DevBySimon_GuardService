@@ -8,8 +8,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:persistent="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -19,20 +19,27 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".LocalGuardService" />
+        <service android:name=".doubleprocess.LocalGuardService" />
 
         <service
-            android:name=".RemoteGuardService"
+            android:name=".doubleprocess.RemoteGuardService"
             android:process=":remoteService" />
 
-        <!-- <service
-            android:name=".GuardJobProcess1"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":Jobscheduler" />-->
-        <!-- <service
-            android:name=".GuardJobProcess2"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":Jobscheduler" />-->
+        <service
+            android:name=".jobschedule.GuardJobProcess"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!--  android:process=":Jobscheduler" -->
+
+        <activity
+            android:name=".keepalive.KeepAliveAcitivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance" />
+        <!--android:process=":process"-->
+        <!--android:theme="@style/KeepAliveProcess"-->
     </application>
 
 </manifest>
